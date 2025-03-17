@@ -3,6 +3,9 @@ import { betAssessment } from './modules/betAssessment';
 import { shuffleArray } from './modules/shuffle';
 import { deckOfCards } from './modules/cardArray';
 import { drawTwoCards } from './modules/cardDraw';
+import { aceLogic } from './modules/aceLogic';
+import { dealerDrawCards } from './modules/dealerDraw';
+import { playerTurn } from './modules/playerTurn';
 
 const prompt = PromptSync();
 
@@ -28,12 +31,22 @@ let shuffledDeck = shuffleArray(deckOfCards);
 //drawTwo
 let twoCards = drawTwoCards(shuffledDeck);
 
-let total = twoCards[0].value + twoCards[1].value;
+let total = aceLogic(twoCards.drawnCards);
 
 console.log(
-  `Your hand: ${twoCards[0].name}${twoCards[0].suit},`,
-  `${twoCards[1].name}${twoCards[1].suit}` + ' ',
+  `Your hand: ${twoCards.drawnCards[0].name}${twoCards.drawnCards[0].suit},`,
+  `${twoCards.drawnCards[1].name}${twoCards.drawnCards[1].suit}` + ' ',
   `(Total: ${total})`
 );
 
-// console.log(`Your hand: `);
+//Dealer's hand
+const { dealerHand, updatedDeck: newDeck } = dealerDrawCards(
+  twoCards.updatedDeckBro
+);
+console.log(
+  `Dealer's hand: ${dealerHand[0].name}${dealerHand[0].suit}, [hidden]`
+);
+
+let playerDecision = prompt('Your action (hit/stand): ');
+
+playerTurn(newDeck, twoCards.drawnCards, dealerHand, playerDecision);

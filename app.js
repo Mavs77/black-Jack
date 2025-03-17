@@ -8,6 +8,9 @@ const betAssessment_1 = require("./modules/betAssessment");
 const shuffle_1 = require("./modules/shuffle");
 const cardArray_1 = require("./modules/cardArray");
 const cardDraw_1 = require("./modules/cardDraw");
+const aceLogic_1 = require("./modules/aceLogic");
+const dealerDraw_1 = require("./modules/dealerDraw");
+const playerTurn_1 = require("./modules/playerTurn");
 const prompt = (0, prompt_sync_1.default)();
 // Player funds starting the game
 let funds = 100;
@@ -23,6 +26,10 @@ betAmt = (0, betAssessment_1.betAssessment)(betAmt, funds); // Capture the valid
 let shuffledDeck = (0, shuffle_1.shuffleArray)(cardArray_1.deckOfCards);
 //drawTwo
 let twoCards = (0, cardDraw_1.drawTwoCards)(shuffledDeck);
-let total = twoCards[0].value + twoCards[1].value;
-console.log(`Your hand: ${twoCards[0].name}${twoCards[0].suit},`, `${twoCards[1].name}${twoCards[1].suit}` + ' ', `(Total: ${total})`);
-// console.log(`Your hand: `);
+let total = (0, aceLogic_1.aceLogic)(twoCards.drawnCards);
+console.log(`Your hand: ${twoCards.drawnCards[0].name}${twoCards.drawnCards[0].suit},`, `${twoCards.drawnCards[1].name}${twoCards.drawnCards[1].suit}` + ' ', `(Total: ${total})`);
+//Dealer's hand
+const { dealerHand, updatedDeck: newDeck } = (0, dealerDraw_1.dealerDrawCards)(twoCards.updatedDeckBro);
+console.log(`Dealer's hand: ${dealerHand[0].name}${dealerHand[0].suit}, [hidden]`);
+let playerDecision = prompt('Your action (hit/stand): ');
+(0, playerTurn_1.playerTurn)(newDeck, twoCards.drawnCards, dealerHand, playerDecision);
